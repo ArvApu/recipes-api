@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('email')->unique();
             $table->string('username')->nullable();
-            $table->timestamp('last_login_at');
+            $table->timestamp('last_login_at')->nullable()->default(null);
             $table->timestamps();
         });
     }
