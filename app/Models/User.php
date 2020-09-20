@@ -2,32 +2,42 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Lumen\Auth\Authorizable;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+/**
+ * Class User
+ * @property integer $id
+ * @property string $email
+ * @property string|null $username
+ * @property $last_login_at
+ * @property $created_at
+ * @property $updated_at
+ * @property Recipe[] $recipes
+ * @property Comment[] $comments
+ * @package App\Models
+ */
+class User extends Model
 {
-    use Authenticatable, Authorizable, HasFactory;
-
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritdoc
      */
     protected $fillable = [
-        'name', 'email',
+        'email', 'username', 'last_login_at'
     ];
 
     /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    protected $hidden = [
-        'password',
-    ];
+    public function recipes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Recipe::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
