@@ -18,6 +18,13 @@ namespace App\Models;
 class Comment extends Model
 {
     /**
+     * @inheritdoc
+     */
+    protected $fillable = [
+        'user_id', 'recipe_id', 'title', 'comment'
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
