@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * Class Recipe
  * @property integer $id
@@ -19,6 +17,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Recipe extends Model
 {
+    /**
+     * @inheritdoc
+     */
+    protected $fillable = [
+        'name', 'user_id', 'description', 'recipe'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
