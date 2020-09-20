@@ -2,17 +2,16 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
+/* Recipes */
+$router->get('/recipes', 'RecipesController@all');
+$router->get('/recipes/{id:\d+}', 'RecipesController@one');
+$router->post('/recipes', 'RecipesController@create');
+$router->put('/recipes/{id:\d+}', 'RecipesController@update');
+$router->delete('/recipes/{id:\d+}', 'RecipesController@destroy');
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+/* Comments */
+$router->get('/recipes/{id:\d+}/comments', 'CommentController@all');
+$router->get('/recipes/{id:\d+}/comments/{comment_id:\d+}', 'CommentController@one');
+$router->post('/recipes/{id:\d+}/comments', 'CommentController@create');
+$router->put('/recipes/{id:\d+}/comments/{comment_id:\d+}', 'CommentController@update');
+$router->delete('/recipes/{id:\d+}/comments/{comment_id:\d+}', 'CommentController@destroy');
