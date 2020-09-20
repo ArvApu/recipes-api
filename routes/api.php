@@ -3,15 +3,15 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /* Recipes */
-$router->get('/recipes', 'RecipesController@all');
-$router->get('/recipes/{id:\d+}', 'RecipesController@one');
-$router->post('/recipes', 'RecipesController@create');
-$router->put('/recipes/{id:\d+}', 'RecipesController@update');
-$router->delete('/recipes/{id:\d+}', 'RecipesController@destroy');
+$router->get('/recipes', 'RecipeController@all');
+$router->get('/recipes/{id:\d+}', 'RecipeController@one');
+$router->post('/recipes', 'RecipeController@create');
+$router->put('/recipes/{id:\d+}', 'RecipeController@update');
+$router->delete('/recipes/{id:\d+}', 'RecipeController@destroy');
 
 /* Comments */
-$router->get('/recipes/{id:\d+}/comments', 'CommentController@all');
-$router->get('/recipes/{id:\d+}/comments/{comment_id:\d+}', 'CommentController@one');
-$router->post('/recipes/{id:\d+}/comments', 'CommentController@create');
-$router->put('/recipes/{id:\d+}/comments/{comment_id:\d+}', 'CommentController@update');
-$router->delete('/recipes/{id:\d+}/comments/{comment_id:\d+}', 'CommentController@destroy');
+$router->get('/recipes/{recipe_id:\d+}/comments', 'CommentController@all');
+$router->get('/recipes/{recipe_id:\d+}/comments/{id:\d+}', 'CommentController@one');
+$router->post('/recipes/{recipe_id:\d+}/comments', 'CommentController@create');
+$router->put('/recipes/{recipe_id:\d+}/comments/{id:\d+}', 'CommentController@update');
+$router->delete('/recipes/{recipe_id:\d+}/comments/{id:\d+}', 'CommentController@destroy');
