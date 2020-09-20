@@ -10,8 +10,8 @@ $router->put('/recipes/{id:\d+}', 'RecipeController@update');
 $router->delete('/recipes/{id:\d+}', 'RecipeController@destroy');
 
 /* Comments */
-$router->get('/recipes/{recipe_id:\d+}/comments', 'CommentController@all');
-$router->get('/recipes/{recipe_id:\d+}/comments/{id:\d+}', 'CommentController@one');
-$router->post('/recipes/{recipe_id:\d+}/comments', 'CommentController@create');
-$router->put('/recipes/{recipe_id:\d+}/comments/{id:\d+}', 'CommentController@update');
-$router->delete('/recipes/{recipe_id:\d+}/comments/{id:\d+}', 'CommentController@destroy');
+$router->get('/recipes/{recipeId:\d+}/comments', 'CommentController@all');
+$router->get('/recipes/{recipeId:\d+}/comments/{id:\d+}', 'CommentController@one');
+$router->post('/recipes/{recipeId:\d+}/comments', 'CommentController@create');
+$router->put('/recipes/{recipeId:\d+}/comments/{id:\d+}', 'CommentController@update');
+$router->delete('/recipes/{recipeId:\d+}/comments/{id:\d+}', 'CommentController@destroy');
