@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
-use App\Models\Recipe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -29,14 +28,12 @@ class CommentController extends Controller
      * Todo: add pagination
      *
      * @param Request $request
-     * @param int $recipeId
-     * @param Recipe $recipe
      * @return JsonResponse
      */
-    public function all(Request $request, int $recipeId, Recipe $recipe): JsonResponse
+    public function all(Request $request): JsonResponse
     {
-        $recipe = $recipe->findOrFail($recipeId);
-        return new JsonResponse($recipe->comments, JsonResponse::HTTP_OK);
+        $comments = $this->comment->get();
+        return new JsonResponse($comments, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -59,15 +56,15 @@ class CommentController extends Controller
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(int $recipeId, Request $request): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $data = $this->validate($request, [
             'title' => ['required', 'string', 'between:3,40'],
             'comment' => ['required', 'string', 'max:200'],
+            'recipe_id' => ['required', 'integer', 'exists:recipes,id'],
         ]);
 
         $data['user_id'] = 1; // Todo: current logged in user
-        $data['recipe_id'] = $recipeId;
 
         $comment = $this->comment->create($data);
 

@@ -49,6 +49,19 @@ class RecipeController extends Controller
     }
 
     /**
+     * Get all comments of recipe
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function comments(Request $request, int $id): JsonResponse
+    {
+        $recipe = $this->recipe->findOrFail($id);
+        return new JsonResponse($recipe->comments, JsonResponse::HTTP_OK);
+    }
+
+    /**
      * Create recipe
      *
      * @param Request $request
@@ -68,6 +81,30 @@ class RecipeController extends Controller
         $recipe = $this->recipe->create($data);
 
         return new JsonResponse($recipe, JsonResponse::HTTP_CREATED);
+    }
+
+    /**
+     * Create new comment for recipe
+     *
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function comment(int $id, Request $request): JsonResponse
+    {
+        $data = $this->validate($request, [
+            'title' => ['required', 'string', 'between:3,40'],
+            'comment' => ['required', 'string', 'max:200'],
+        ]);
+
+        $recipe = $this->recipe->findOrFail($id);
+
+        $data['user_id'] = 1; // Todo: current logged in user
+
+        $comment = $recipe->comments()->create($data);
+
+        return new JsonResponse($comment, JsonResponse::HTTP_CREATED);
     }
 
     /**
