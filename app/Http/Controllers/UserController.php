@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-// TODO: super admin only
 class UserController extends Controller
 {
     /**
@@ -24,7 +23,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get all recipes
+     * Get all users
      *
      * TODO: add pagination
      *
@@ -33,24 +32,57 @@ class UserController extends Controller
      */
     public function all(Request $request): JsonResponse
     {
+        // TODO: super admin only
         $users = $this->user->get();
         return new JsonResponse($users, JsonResponse::HTTP_OK);
     }
 
     /**
-     * Get one recipe
+     * Get one user
      *
      * @param int $id
      * @return JsonResponse
      */
     public function one(int $id): JsonResponse
     {
+        // TODO: super admin only
         $users = $this->user->findOrFail($id);
         return new JsonResponse($users, JsonResponse::HTTP_OK);
     }
 
+
+
+
+
+
     /**
-     * Create recipe
+     * Get one user's recipes
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function recipes(int $id): JsonResponse
+    {
+        $user = $this->user->findOrFail($id);
+        $recipes = $user->recipes;
+        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * Get one user's comments
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function comments(int $id): JsonResponse
+    {
+        $user = $this->user->findOrFail($id);
+        $comments = $user->comments;
+        return new JsonResponse($comments, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * Create user
      *
      * @param Request $request
      * @return JsonResponse
@@ -58,6 +90,7 @@ class UserController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
+        // TODO: super admin only
         $data = $this->validate($request, [
             'username' => ['required', 'string', 'between:3,60', 'unique:users'],
             'email' => ['required', 'string', 'max:140', 'unique:users'],
@@ -71,7 +104,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update recipe
+     * Update user
      *
      * @param Request $request
      * @param int $id
@@ -94,7 +127,7 @@ class UserController extends Controller
     }
 
     /**
-     * Destroy recipe
+     * Destroy user
      *
      * @param int $id
      * @return JsonResponse
