@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * Class User
  * @property integer $id
@@ -10,12 +12,15 @@ namespace App\Models;
  * @property $last_login_at
  * @property $created_at
  * @property $updated_at
+ * @property $deleted_at
  * @property Recipe[] $recipes
  * @property Comment[] $comments
  * @package App\Models
  */
 class User extends Model
 {
+    use SoftDeletes;
+
     /**
      * @inheritdoc
      */

@@ -15,3 +15,11 @@ $router->get('/comments/{id:\d+}', 'CommentController@one');
 $router->post('/recipes/{recipeId:\d+}/comments', 'CommentController@create');
 $router->put('/comments/{id:\d+}', 'CommentController@update');
 $router->delete('/comments/{id:\d+}', 'CommentController@destroy');
+
+/* Users */
+$router->get('/users', 'UserController@all');
+$router->get('/users/{id:\d+}', 'UserController@one');
+$router->post('/users', 'UserController@create');
+$router->put('/users/{id:\d+}', 'UserController@update');
+$router->delete('/users/{id:\d+}', 'UserController@destroy');
+
