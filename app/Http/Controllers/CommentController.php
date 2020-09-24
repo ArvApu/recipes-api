@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -72,11 +71,18 @@ class CommentController extends Controller
 
         $data['user_id'] = $userId;
 
-        /** @var Recipe $recipe */
+        /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
+        /** @var \App\Models\Comment $comment **/
         $comment = $recipe->comments()->create($data);
 
-        return new JsonResponse($comment, JsonResponse::HTTP_CREATED);
+        return new JsonResponse($comment, JsonResponse::HTTP_CREATED, [
+            'Location' => route('get_comment', [
+                'userId' => $userId,
+                'recipeId' => $recipeId,
+                'commentId' => $comment->id
+            ]),
+        ]);
     }
 
     /**
@@ -99,7 +105,7 @@ class CommentController extends Controller
             'comment' => ['sometimes', 'string', 'max:200'],
         ]);
 
-        /** @var Recipe $recipe */
+        /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
         $comment = $recipe->comments()->findOrFail($commentId);
 
@@ -122,7 +128,7 @@ class CommentController extends Controller
         // TODO: is owner
         // TODO: check if user who is deleting is logged: Auth:user()-> === $userId
 
-        /** @var Recipe $recipe */
+        /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
         $recipe->comments()->findOrFail($commentId)->delete();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);

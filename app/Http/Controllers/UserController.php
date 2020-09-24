@@ -68,7 +68,9 @@ class UserController extends Controller
 
         // Todo: send email to oauth
 
-        return new JsonResponse($user, JsonResponse::HTTP_CREATED);
+        return new JsonResponse($user, JsonResponse::HTTP_CREATED, [
+            'Location' => route('get_user', ['userId' => $user->id]),
+        ]);
     }
 
     /**

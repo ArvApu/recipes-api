@@ -67,9 +67,12 @@ class RecipeController extends Controller
             'recipe' => ['required', 'string'],
         ]);
 
+        /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->create($data);
 
-        return new JsonResponse($recipe, JsonResponse::HTTP_CREATED);
+        return new JsonResponse($recipe, JsonResponse::HTTP_CREATED, [
+            'Location' => route('get_recipe', ['userId' => $userId, 'recipeId' => $recipe->id]),
+        ]);
     }
 
     /**
