@@ -25,7 +25,7 @@ class CommentController extends Controller
     /**
      * Get all comments of recipe
      *
-     * Todo: add pagination and filtering
+     * TODO: add pagination, soritng and filtering
      *
      * @param int $userId
      * @param int $recipeId

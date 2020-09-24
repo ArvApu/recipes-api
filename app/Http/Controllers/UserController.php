@@ -25,7 +25,7 @@ class UserController extends Controller
     /**
      * Get all users
      *
-     * TODO: add pagination and filtering
+     * TODO: add pagination, soritng and filtering
      *
      * @return JsonResponse
      */

@@ -25,7 +25,7 @@ class RecipeController extends Controller
     /**
      * Get all recipes
      *
-     * TODO: add pagination and filtering
+     * TODO: add pagination, soritng and filtering
      *
      * @param int $userId
      * @return JsonResponse
