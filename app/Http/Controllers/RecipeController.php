@@ -59,13 +59,13 @@ class RecipeController extends Controller
      */
     public function createForUser(Request $request, int $userId): JsonResponse
     {
+        // TODO: check if user who is posting is logged: Auth:user()-> === $userId
+
         $data = $this->validate($request, [
             'name' => ['required', 'string', 'between:3,50'],
             'description' => ['required', 'string', 'max:150'],
             'recipe' => ['required', 'string'],
         ]);
-
-        // TODO: check if user who is posting is logged: Auth:user()-> === $userId
 
         $recipe = $this->user->findOrFail($userId)->recipes()->create($data);
 
@@ -83,7 +83,8 @@ class RecipeController extends Controller
      */
     public function updateForUser(Request $request, int $userId, int $recipeId): JsonResponse
     {
-        // TODO: check if user is owner of this recipe
+        // TODO: is owner
+        // TODO: check if user who is editing is logged: Auth:user()-> === $userId
 
         $data = $this->validate($request, [
             'name' => ['sometimes', 'string', 'between:5,50'],
@@ -108,7 +109,8 @@ class RecipeController extends Controller
      */
     public function destroyForUser(int $userId, int $recipeId): JsonResponse
     {
-        // TODO: user should be logged in user: Auth:user()
+        // TODO: is owner
+        // TODO: check if user who is deleting is logged: Auth:user()-> === $userId
 
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
         $recipe->delete();
