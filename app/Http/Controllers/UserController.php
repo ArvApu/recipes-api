@@ -25,12 +25,11 @@ class UserController extends Controller
     /**
      * Get all users
      *
-     * TODO: add pagination
+     * TODO: add pagination and filtering
      *
-     * @param Request $request
      * @return JsonResponse
      */
-    public function all(Request $request): JsonResponse
+    public function all(): JsonResponse
     {
         // TODO: super admin only
         $users = $this->user->get();
@@ -40,45 +39,14 @@ class UserController extends Controller
     /**
      * Get one user
      *
-     * @param int $id
+     * @param int $userId
      * @return JsonResponse
      */
-    public function one(int $id): JsonResponse
+    public function one(int $userId): JsonResponse
     {
         // TODO: super admin only
-        $users = $this->user->findOrFail($id);
+        $users = $this->user->findOrFail($userId);
         return new JsonResponse($users, JsonResponse::HTTP_OK);
-    }
-
-
-
-
-
-
-    /**
-     * Get one user's recipes
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function recipes(int $id): JsonResponse
-    {
-        $user = $this->user->findOrFail($id);
-        $recipes = $user->recipes;
-        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
-    }
-
-    /**
-     * Get one user's comments
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function comments(int $id): JsonResponse
-    {
-        $user = $this->user->findOrFail($id);
-        $comments = $user->comments;
-        return new JsonResponse($comments, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -107,11 +75,11 @@ class UserController extends Controller
      * Update user
      *
      * @param Request $request
-     * @param int $id
+     * @param int $userId
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $userId): JsonResponse
     {
         // Todo: super admin and user itself only
         $data = $this->validate($request, [
@@ -119,7 +87,7 @@ class UserController extends Controller
             'email' => ['sometimes', 'string', 'max:140', 'unique:users'],
         ]);
 
-        $user = $this->user->findOrFail($id);
+        $user = $this->user->findOrFail($userId);
 
         $user->update($data);
 
@@ -129,14 +97,14 @@ class UserController extends Controller
     /**
      * Destroy user
      *
-     * @param int $id
+     * @param int $userId
      * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $userId): JsonResponse
     {
         // Todo: super admin and user itself only
-        $user = $this->user->findOrFail($id);
+        $user = $this->user->findOrFail($userId);
         $user->delete();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }

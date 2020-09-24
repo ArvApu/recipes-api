@@ -2,73 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Recipe;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
     /**
-     * @var Recipe
+     * @var User
      */
-    private $recipe;
+    private $user;
 
     /**
      * RecipeController constructor.
-     * @param Recipe $recipe
+     * @param User $user
      */
-    public function __construct(Recipe $recipe)
+    public function __construct(User $user)
     {
-        $this->recipe = $recipe;
+        $this->user = $user;
     }
 
     /**
      * Get all recipes
      *
-     * TODO: add pagination
+     * TODO: add pagination and filtering
      *
-     * @param Request $request
+     * @param int $userId
      * @return JsonResponse
      */
-    public function all(Request $request): JsonResponse
+    public function allForUser(int $userId): JsonResponse
     {
-        $recipes = $this->recipe->get();
+        $recipes = $this->user->findOrFail($userId)->recipes;
         return new JsonResponse($recipes, JsonResponse::HTTP_OK);
     }
 
     /**
      * Get one recipe
      *
-     * @param int $id
+     * @param int $userId
+     * @param int $recipeId
      * @return JsonResponse
      */
-    public function one(int $id): JsonResponse
+    public function oneForUser(int $userId, int $recipeId): JsonResponse
     {
-        $recipes = $this->recipe->findOrFail($id);
-        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
-    }
-
-    /**
-     * Get all comments of recipe
-     *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function comments(Request $request, int $id): JsonResponse
-    {
-        $recipe = $this->recipe->findOrFail($id);
-        return new JsonResponse($recipe->comments, JsonResponse::HTTP_OK);
+        $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
+        return new JsonResponse($recipe, JsonResponse::HTTP_OK);
     }
 
     /**
      * Create recipe
      *
      * @param Request $request
+     * @param int $userId
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(Request $request): JsonResponse
+    public function createForUser(Request $request, int $userId): JsonResponse
     {
         $data = $this->validate($request, [
             'name' => ['required', 'string', 'between:3,50'],
@@ -76,48 +65,25 @@ class RecipeController extends Controller
             'recipe' => ['required', 'string'],
         ]);
 
-        $data['user_id'] = 1; // TODO: user should be logged in user: Auth:user()
+        // TODO: check if user who is posting is logged: Auth:user()-> === $userId
 
-        $recipe = $this->recipe->create($data);
+        $recipe = $this->user->findOrFail($userId)->recipes()->create($data);
 
         return new JsonResponse($recipe, JsonResponse::HTTP_CREATED);
-    }
-
-    /**
-     * Create new comment for recipe
-     *
-     * @param int $id
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function comment(int $id, Request $request): JsonResponse
-    {
-        $data = $this->validate($request, [
-            'title' => ['required', 'string', 'between:3,40'],
-            'comment' => ['required', 'string', 'max:200'],
-        ]);
-
-        $recipe = $this->recipe->findOrFail($id);
-
-        $data['user_id'] = 1; // Todo: current logged in user
-
-        $comment = $recipe->comments()->create($data);
-
-        return new JsonResponse($comment, JsonResponse::HTTP_CREATED);
     }
 
     /**
      * Update recipe
      *
      * @param Request $request
-     * @param int $id
+     * @param int $userId
+     * @param int $recipeId
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function updateForUser(Request $request, int $userId, int $recipeId): JsonResponse
     {
-        // TODO: check if user is owner of this comment
+        // TODO: check if user is owner of this recipe
 
         $data = $this->validate($request, [
             'name' => ['sometimes', 'string', 'between:5,50'],
@@ -125,7 +91,7 @@ class RecipeController extends Controller
             'recipe' => ['sometimes', 'string'],
         ]);
 
-        $recipe = $this->recipe->findOrFail($id);
+        $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
 
         $recipe->update($data);
 
@@ -135,15 +101,16 @@ class RecipeController extends Controller
     /**
      * Destroy recipe
      *
-     * @param int $id
+     * @param int $userId
+     * @param int $recipeId
      * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroyForUser(int $userId, int $recipeId): JsonResponse
     {
         // TODO: user should be logged in user: Auth:user()
 
-        $recipe = $this->recipe->findOrFail($id);
+        $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
         $recipe->delete();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
