@@ -7,10 +7,6 @@ use App\Auth\UserProviders\OauthUserProvider;
 use App\Services\AuthorizationServer;
 use Illuminate\Support\ServiceProvider;
 
-/**
- * Class AuthServiceProvider
- * @package App\Providers
- */
 class AuthServiceProvider extends ServiceProvider
 {
     /**
