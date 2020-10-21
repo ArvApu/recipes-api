@@ -95,9 +95,6 @@ class CommentController extends Controller
      */
     public function updateForUserRecipe(Request $request, int $userId, int $recipeId, int $commentId): JsonResponse
     {
-        // TODO: is owner
-        // TODO: check if user who is posting is logged: Auth:user()-> === $userId
-
         $data = $this->validate($request, [
             'title' => ['sometimes', 'string', 'between:3,40'],
             'comment' => ['sometimes', 'string', 'max:200'],
@@ -123,9 +120,6 @@ class CommentController extends Controller
      */
     public function destroyForUserRecipe(int $userId, int $recipeId, int $commentId): JsonResponse
     {
-        // TODO: is owner
-        // TODO: check if user who is deleting is logged: Auth:user()-> === $userId
-
         /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
         $recipe->comments()->findOrFail($commentId)->delete();

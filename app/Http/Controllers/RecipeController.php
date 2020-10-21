@@ -25,7 +25,7 @@ class RecipeController extends Controller
     /**
      * Get all recipes
      *
-     * TODO: add pagination, soritng and filtering
+     * TODO: add pagination, sorting and filtering
      *
      * @param int $userId
      * @return JsonResponse
@@ -59,8 +59,6 @@ class RecipeController extends Controller
      */
     public function createForUser(Request $request, int $userId): JsonResponse
     {
-        // TODO: check if user who is posting is logged: Auth:user()-> === $userId
-
         $data = $this->validate($request, [
             'name' => ['required', 'string', 'between:3,50'],
             'description' => ['required', 'string', 'max:150'],
@@ -86,9 +84,6 @@ class RecipeController extends Controller
      */
     public function updateForUser(Request $request, int $userId, int $recipeId): JsonResponse
     {
-        // TODO: is owner
-        // TODO: check if user who is editing is logged: Auth:user()-> === $userId
-
         $data = $this->validate($request, [
             'name' => ['sometimes', 'string', 'between:5,50'],
             'description' => ['sometimes', 'string', 'max:150'],
@@ -112,9 +107,6 @@ class RecipeController extends Controller
      */
     public function destroyForUser(int $userId, int $recipeId): JsonResponse
     {
-        // TODO: is owner
-        // TODO: check if user who is deleting is logged: Auth:user()-> === $userId
-
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
         $recipe->delete();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);

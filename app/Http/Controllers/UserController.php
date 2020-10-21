@@ -25,13 +25,12 @@ class UserController extends Controller
     /**
      * Get all users
      *
-     * TODO: add pagination, soritng and filtering
+     * TODO: add pagination, sorting and filtering
      *
      * @return JsonResponse
      */
     public function all(): JsonResponse
     {
-        // TODO: super admin only
         $users = $this->user->get();
         return new JsonResponse($users, JsonResponse::HTTP_OK);
     }
@@ -44,7 +43,6 @@ class UserController extends Controller
      */
     public function one(int $userId): JsonResponse
     {
-        // TODO: super admin only
         $users = $this->user->findOrFail($userId);
         return new JsonResponse($users, JsonResponse::HTTP_OK);
     }
@@ -58,7 +56,6 @@ class UserController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
-        // TODO: super admin only
         $data = $this->validate($request, [
             'username' => ['required', 'string', 'between:3,60', 'unique:users'],
             'email' => ['required', 'string', 'max:140', 'unique:users'],
@@ -83,7 +80,6 @@ class UserController extends Controller
      */
     public function update(Request $request, int $userId): JsonResponse
     {
-        // Todo: super admin and user itself only
         $data = $this->validate($request, [
             'username' => ['sometimes', 'string', 'between:3,60', 'unique:users'],
             'email' => ['sometimes', 'string', 'max:140', 'unique:users'],
@@ -105,7 +101,6 @@ class UserController extends Controller
      */
     public function destroy(int $userId): JsonResponse
     {
-        // Todo: super admin and user itself only
         $user = $this->user->findOrFail($userId);
         $user->delete();
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
