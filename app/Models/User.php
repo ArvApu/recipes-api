@@ -45,6 +45,16 @@ class User extends Model
     ];
 
     /**
+     * @inheritdoc
+     */
+    protected $casts = [
+        'last_login_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function recipes(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -59,6 +69,7 @@ class User extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
     /**
      * @return BelongsTo
      */
@@ -66,5 +77,4 @@ class User extends Model
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
-
 }

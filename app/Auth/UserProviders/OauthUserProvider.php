@@ -3,6 +3,7 @@
 namespace App\Auth\UserProviders;
 
 use App\Auth\Users\AuthUser;
+use App\Models\Role;
 use App\Services\AuthorizationServer;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -104,7 +105,7 @@ class OauthUserProvider implements UserProvider
      * @param array $oauthUser
      * @return array
      */
-    protected function resolveUser(array $oauthUser)
+    protected function resolveUser(array $oauthUser): array
     {
         $systemUser = $this->conn->table($this->table)->where('oauth_user_id', '=', $oauthUser['id'])->first();
 
@@ -113,7 +114,7 @@ class OauthUserProvider implements UserProvider
         }
 
         $systemUser = [
-            'role_id' => 'user', // todo via constant
+            'role_id' => $this->resolveUserRole($oauthUser['role_id']),
             'oauth_user_id' => $oauthUser['id'],
             'username' => $oauthUser['username'],
             'email' => $oauthUser['email'],
@@ -125,5 +126,27 @@ class OauthUserProvider implements UserProvider
         $systemUser['id'] = $this->conn->table($this->table)->insertGetId($systemUser);
 
         return $systemUser;
+    }
+
+    /**
+     * Resolve user role from oauth user role
+     *
+     * @param string $oauthRole
+     * @return string
+     */
+    protected function resolveUserRole(string $oauthRole): string
+    {
+        $role = Role::USER; // Default is simple user
+
+        switch ($oauthRole) {
+            case 'admin':
+                $role = Role::ADMIN;
+                break;
+            case 'user':
+                $role = Role::USER;
+                break;
+        }
+
+        return $role;
     }
 }

@@ -73,9 +73,7 @@ class OauthGuard implements Guard
      */
     protected function getTokenForRequest(): string
     {
-        if (empty($token)) {
-            $token = $this->request->bearerToken();
-        }
+        $token = $this->request->bearerToken();
 
         if (empty($token)) {
             $token = $this->request->getPassword();
