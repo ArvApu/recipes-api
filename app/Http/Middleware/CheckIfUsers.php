@@ -26,6 +26,10 @@ class CheckIfUsers
             return $next($request);
         }
 
+        if($request->user()->isAdmin()) {
+            return $next($request);
+        }
+
         throw new HttpException(403, 'Forbidden');
     }
 }

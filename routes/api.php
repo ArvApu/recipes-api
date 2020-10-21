@@ -16,9 +16,7 @@ $router->group([
 
         /* Create */
         $router->post('/users', 'UserController@create');
-
     });
-
 
     $router->group(['middleware' => 'belongs'], function ($router) {
 
@@ -38,12 +36,11 @@ $router->group([
         $router->patch('/users/{userId:\d+}', 'UserController@update');
         $router->patch('/users/{userId:\d+}/recipes/{recipeId:\d+}', 'RecipeController@updateForUser');
         $router->patch('/users/{userId:\d+}/recipes/{recipeId:\d+}/comments/{commentId:\d+}', 'CommentController@updateForUserRecipe');
+
+        /* Delete */
+        $router->delete('/users/{userId:\d+}', 'UserController@destroy');
+        $router->delete('/users/{userId:\d+}/recipes/{recipeId:\d+}', 'RecipeController@destroyForUser');
+        $router->delete('/users/{userId:\d+}/recipes/{recipeId:\d+}/comments/{commentId:\d+}', 'CommentController@destroyForUserRecipe');
     });
-
-
-    /* Delete */
-    $router->delete('/users/{userId:\d+}', 'UserController@destroy');
-    $router->delete('/users/{userId:\d+}/recipes/{recipeId:\d+}', 'RecipeController@destroyForUser');
-    $router->delete('/users/{userId:\d+}/recipes/{recipeId:\d+}/comments/{commentId:\d+}', 'CommentController@destroyForUserRecipe');
 });
 
