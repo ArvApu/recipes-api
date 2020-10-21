@@ -25,7 +25,7 @@ class CommentController extends Controller
     /**
      * Get all comments of recipe
      *
-     * TODO: add pagination, soritng and filtering
+     * TODO: add pagination, sorting and filtering
      *
      * @param int $userId
      * @param int $recipeId
@@ -67,9 +67,7 @@ class CommentController extends Controller
             'comment' => ['required', 'string', 'max:200'],
         ]);
 
-        // TODO: check if user who is posting is logged: Auth:user()-> === $userId
-
-        $data['user_id'] = $userId;
+        $data['user_id'] = $request->user()->id;
 
         /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);

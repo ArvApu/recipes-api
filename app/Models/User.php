@@ -77,4 +77,14 @@ class User extends Model
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
+
+    /**
+     * Check if user has admin role
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role_id === Role::ADMIN;
+    }
 }

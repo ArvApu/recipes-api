@@ -2,8 +2,8 @@
 
 namespace App\Auth\UserProviders;
 
-use App\Auth\Users\AuthUser;
 use App\Models\Role;
+use App\Models\User;
 use App\Services\AuthorizationServer;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -50,7 +50,7 @@ class OauthUserProvider implements UserProvider
             return null;
         }
 
-        return new AuthUser((array) $user);
+        return (new User())->forceFill((array) $user);
     }
 
     /**
@@ -82,13 +82,7 @@ class OauthUserProvider implements UserProvider
 
         $user = $this->resolveUser($oauthUser);
 
-        return new AuthUser([
-            'id' => $user['id'],
-            'oauth_user_id' => $user['oauth_user_id'],
-            'username' => $user['username'],
-            'email' => $user['email'],
-            'email_verified_at' => $user['email']
-        ]);
+        return (new User())->forceFill($user);
     }
 
     /**
