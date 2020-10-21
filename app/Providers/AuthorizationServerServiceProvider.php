@@ -15,7 +15,9 @@ class AuthorizationServerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(AuthorizationServer::class, function ($app) {
-            return new AuthorizationServer();
+            return new AuthorizationServer(
+                $app->make('config')->get('auth.token_introspect_url')
+            );
         });
     }
 }

@@ -18,7 +18,7 @@ class CheckIfUsers
      */
     public function handle(Request $request, Closure $next)
     {
-        if(! ($userId = $request->get('userId'))) {
+        if(! ($userId = $request->route('userId'))) {
             return $next($request);
         }
 

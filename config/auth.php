@@ -69,4 +69,6 @@ return [
             'table' => 'users',
         ],
     ],
+
+    'token_introspect_url' => env('TOKEN_INTROSPECT_URL', 'http://localhost')
 ];

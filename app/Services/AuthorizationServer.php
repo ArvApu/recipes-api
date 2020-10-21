@@ -18,13 +18,19 @@ final class AuthorizationServer
     private $http;
 
     /**
-     * AuthorizationServerServiceProvider constructor.
+     * @var string
      */
-    public function __construct()
+    private $uri;
+
+    /**
+     * AuthorizationServerServiceProvider constructor.
+     * @param string $tokenUri
+     */
+    public function __construct(string $tokenUri)
     {
+        $this->uri  = $tokenUri;
         $this->data = [];
         $this->http = new Client([
-            'base_uri' => 'http://localhost:8000/',
             'headers' => ['Accept' => 'application/json'],
         ]);
     }
@@ -38,7 +44,7 @@ final class AuthorizationServer
     public function getUserInformationWithToken(string $token): ?array
     {
         try {
-            $response = $this->http->get('/api/user', [
+            $response = $this->http->get($this->uri, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $token,
                 ]
