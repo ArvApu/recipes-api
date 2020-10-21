@@ -3,9 +3,13 @@
 namespace App\Auth\Guards;
 
 use Illuminate\Auth\GuardHelpers;
+use Illuminate\Cache\Repository as Cache;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
+use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Token;
 
 class OauthGuard implements Guard
 {
@@ -17,14 +21,33 @@ class OauthGuard implements Guard
     protected $request;
 
     /**
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
+     * @var Parser
+     */
+    protected $tokenParser;
+
+    /**
+     * @var Token
+     */
+    protected $token;
+
+    /**
      * OauthGuard constructor.
      * @param UserProvider $userProvider
      * @param Request $request
+     * @param Cache $cache
+     * @param Parser $tokenParser
      */
-    public function __construct(UserProvider $userProvider, Request $request)
+    public function __construct(UserProvider $userProvider, Request $request, Cache $cache, Parser $tokenParser)
     {
         $this->provider = $userProvider;
         $this->request  = $request;
+        $this->cache = $cache;
+        $this->tokenParser = $tokenParser;
     }
 
     /**
@@ -48,19 +71,33 @@ class OauthGuard implements Guard
      */
     public function user()
     {
-        // If we've already retrieved the user for the current request we can just
-        // return it back immediately. We do not want to fetch the user data on
-        // every call to this method because that would be tremendously slow.
+        /* If there exists currently retrieved user for the current request we can just return it back. */
         if (! is_null($this->user)) {
             return $this->user;
         }
 
-        $user = null;
-
         $token = $this->getTokenForRequest();
 
-        if (!empty($token)) {
-            $user = $this->provider->retrieveByCredentials(['token' => $token]);
+        /* Without token it is impossible to get user so we skip further logic and return null. */
+        if (empty($token)) {
+            return null;
+        }
+
+        $tokenId = $this->getTokenId($token);
+
+        /* If token has no id it indicates that it is invalid jwt token and therefore we won't be able to get user. */
+        if(is_null($tokenId)) {
+            return null;
+        }
+
+        if ($user = $this->cache->get($tokenId.':user')) {
+            return $user;
+        }
+
+        $user = $this->provider->retrieveByCredentials(['token' => $token]);
+
+        if(!is_null($user)) {
+            $this->cache->set($tokenId.':user', $user, 600);
         }
 
         return $this->user = $user;
@@ -80,5 +117,43 @@ class OauthGuard implements Guard
         }
 
         return $token;
+    }
+
+    /**
+     * Get token jti
+     *
+     * @param string $token
+     * @return string|null
+     */
+    protected function getTokenId(string $token): ?string
+    {
+        $token = $this->parseToken($token);
+
+        if(is_null($token)) {
+            return null;
+        }
+
+        return $token->getClaim('jti');
+    }
+
+    /**
+     * Get token used for auth
+     *
+     * @param string $token
+     * @return Token|null
+     */
+    protected function parseToken(string $token): ?Token
+    {
+        if($this->token) {
+            return $this->token;
+        }
+
+        try {
+            $this->token = $this->tokenParser->parse($token);
+        } catch (InvalidArgumentException $exception) {
+            return null;
+        }
+
+        return $this->token;
     }
 }

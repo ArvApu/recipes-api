@@ -22,7 +22,7 @@ class CheckIfUsers
             return $next($request);
         }
 
-        if($userId === $request->user()->id) {
+        if((int)$userId === $request->user()->id) {
             return $next($request);
         }
 

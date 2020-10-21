@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Auth\Guards\OauthGuard;
 use App\Auth\UserProviders\OauthUserProvider;
 use App\Services\AuthorizationServer;
+use Illuminate\Cache\Repository;
 use Illuminate\Support\ServiceProvider;
+use Lcobucci\JWT\Parser;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,8 @@ class AuthServiceProvider extends ServiceProvider
             return new OAuthGuard(
                 $app['auth']->createUserProvider($config['provider']),
                 $app->make('request'),
+                $app->make('cache.store'),
+                $app->make(Parser::class)
             );
         });
     }
