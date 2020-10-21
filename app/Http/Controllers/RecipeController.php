@@ -65,6 +65,8 @@ class RecipeController extends Controller
             'recipe' => ['required', 'string'],
         ]);
 
+        $data['user_id'] = $userId;
+
         /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->create($data);
 

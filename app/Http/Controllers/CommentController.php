@@ -67,7 +67,7 @@ class CommentController extends Controller
             'comment' => ['required', 'string', 'max:200'],
         ]);
 
-        $data['user_id'] = $request->user()->id;
+        $data['user_id'] = $userId;
 
         /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);

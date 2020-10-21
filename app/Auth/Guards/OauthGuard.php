@@ -69,9 +69,9 @@ class OauthGuard implements Guard
     /**
      * Get the token for the current request.
      *
-     * @return string
+     * @return string|null
      */
-    protected function getTokenForRequest(): string
+    protected function getTokenForRequest(): ?string
     {
         $token = $this->request->bearerToken();
 
