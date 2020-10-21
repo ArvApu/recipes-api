@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class User
  * @property integer $id
+ * @property string $role_id
  * @property string $email
  * @property string|null $username
  * @property $last_login_at
@@ -20,6 +22,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Model
 {
     use SoftDeletes;
+
+    /**
+     * @inheritdoc
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($instance) {
+            if(!isset($instance->role_id)) {
+                $instance->role_id = Role::USER;
+            }
+        });
+    }
 
     /**
      * @inheritdoc
@@ -43,4 +59,12 @@ class User extends Model
     {
         return $this->hasMany(Comment::class);
     }
+    /**
+     * @return BelongsTo
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
 }
