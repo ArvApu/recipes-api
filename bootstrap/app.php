@@ -61,6 +61,7 @@ $app->singleton(
 $app->configure('app');
 $app->configure('auth');
 $app->configure('roles');
+$app->configure('cors');
 
 /*
 |--------------------------------------------------------------------------
@@ -73,9 +74,9 @@ $app->configure('roles');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    Fruitcake\Cors\HandleCors::class,
+]);
 
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
@@ -98,6 +99,7 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\AuthorizationServerServiceProvider::class);
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
