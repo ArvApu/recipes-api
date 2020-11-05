@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -45,6 +46,16 @@ class UserController extends Controller
     {
         $users = $this->user->findOrFail($userId);
         return new JsonResponse($users, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * Get current user
+     *
+     * @return JsonResponse
+     */
+    public function current(): JsonResponse
+    {
+        return new JsonResponse(Auth::user(), JsonResponse::HTTP_OK);
     }
 
     /**

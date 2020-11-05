@@ -6,6 +6,8 @@ $router->group([
     'middleware' => 'auth',
 ], function ($router) {
 
+    $router->get('/user', 'UserController@current');
+
     $router->group(['middleware' => 'admin'], function ($router) {
 
         /* Get all */
