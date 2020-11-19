@@ -21,7 +21,7 @@ class Recipe extends Model
      * @inheritdoc
      */
     protected $fillable = [
-        'user_id', 'name', 'description', 'recipe'
+        'user_id', 'name', 'description', 'recipe', 'duration'
     ];
 
     /**

@@ -19,6 +19,7 @@ class CreateRecipesTable extends Migration
             $table->string('name', 50);
             $table->string('description', 150);
             $table->text('recipe');
+            $table->integer('duration');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

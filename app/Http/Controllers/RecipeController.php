@@ -38,7 +38,7 @@ class RecipeController extends Controller
     }
 
     /**
-     * Get all recipes for certant user
+     * Get all recipes for certain user
      *
      * TODO: add pagination, sorting and filtering
      *
@@ -78,6 +78,7 @@ class RecipeController extends Controller
             'name' => ['required', 'string', 'between:3,50'],
             'description' => ['required', 'string', 'max:150'],
             'recipe' => ['required', 'string'],
+            'duration' => ['required', 'integer'],
         ]);
 
         $data['user_id'] = $userId;
