@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,6 +25,20 @@ class RecipeController extends Controller
 
     /**
      * Get all recipes
+     *
+     * TODO: add pagination, sorting and filtering
+     *
+     * @param Recipe $recipe
+     * @return JsonResponse
+     */
+    public function all(Recipe $recipe): JsonResponse
+    {
+        $recipes = $recipe->get();
+        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * Get all recipes for certant user
      *
      * TODO: add pagination, sorting and filtering
      *

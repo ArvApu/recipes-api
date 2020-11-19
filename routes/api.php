@@ -6,7 +6,14 @@ $router->group([
     'middleware' => 'auth',
 ], function ($router) {
 
+    /* Current user information */
     $router->get('/user', 'UserController@current');
+
+    /* Get all comments for specific user's specific recipe */
+    $router->get('/users/{userId:\d+}/recipes/{recipeId:\d+}/comments', 'CommentController@allForUserRecipe');
+
+    /* Get all recipes that can be long to any user */
+    $router->get('/recipes', 'RecipeController@all');
 
     $router->group(['middleware' => 'admin'], function ($router) {
 
@@ -24,7 +31,6 @@ $router->group([
 
         /* Get all */
         $router->get('/users/{userId:\d+}/recipes', 'RecipeController@allForUser');
-        $router->get('/users/{userId:\d+}/recipes/{recipeId:\d+}/comments', 'CommentController@allForUserRecipe');
 
         /* Get one */
         $router->get('/users/{userId:\d+}/recipes/{recipeId:\d+}', ['as' => 'get_recipe', 'uses' => 'RecipeController@oneForUser']);
