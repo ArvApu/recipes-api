@@ -74,17 +74,21 @@ class RecipeController extends Controller
      */
     public function createForUser(Request $request, int $userId): JsonResponse
     {
-        $data = $this->validate($request, [
+        $this->validate($request, [
             'name' => ['required', 'string', 'between:3,50'],
             'description' => ['required', 'string', 'max:150'],
             'recipe' => ['required', 'string', 'max:500'],
             'duration' => ['required', 'integer'],
+            'picture' => ['required', 'image', 'dimensions:min_width=400,min_height=300', 'max:10000']
         ]);
 
+        $data = $request->except('picture');
         $data['user_id'] = $userId;
 
         /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->create($data);
+
+        $recipe->uploadImage($request->file('picture'));
 
         return new JsonResponse($recipe, JsonResponse::HTTP_CREATED, [
             'Location' => route('get_recipe', ['userId' => $userId, 'recipeId' => $recipe->id]),
@@ -104,11 +108,18 @@ class RecipeController extends Controller
     {
         $data = $this->validate($request, [
             'name' => ['sometimes', 'required', 'string', 'between:5,50'],
-            'description' => ['present', 'required', 'string', 'max:150'],
-            'recipe' => ['present', 'required', 'string', 'max:500'],
+            'description' => ['sometimes', 'required', 'string', 'max:150'],
+            'recipe' => ['sometimes', 'required', 'string', 'max:500'],
+            'picture' => ['sometimes', 'image', 'dimensions:min_width=400,min_height=300', 'max:10000']
         ]);
 
+        /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
+
+        if(isset($data['picture'])) {
+            $recipe->uploadImage($data['picture']);
+            unset($data['picture']);
+        }
 
         $recipe->update($data);
 

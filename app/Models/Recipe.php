@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 /**
  * Class Recipe
  * @property integer $id
@@ -41,4 +44,27 @@ class Recipe extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    public function getPictureAttribute(string $value): string
+    {
+        return env('APP_URL').$value;
+    }
+
+    /**
+     * @param UploadedFile $picture
+     */
+    public function uploadImage(UploadedFile $picture): void
+    {
+        $filename = $this->id.'_'.time().'.'.$picture->getClientOriginalExtension();
+        $destinationPath = storage_path('app/images');
+
+        $picture->move($destinationPath, $filename);
+
+        $this->update(['picture' => '/images/'.$filename]);
+    }
+
 }
