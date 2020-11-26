@@ -78,7 +78,7 @@ class RecipeController extends Controller
             'name' => ['required', 'string', 'between:3,50'],
             'description' => ['required', 'string', 'max:150'],
             'recipe' => ['required', 'string', 'max:500'],
-            'duration' => ['required', 'integer'],
+            'duration' => ['required', 'integer', 'min:10'],
             'picture' => ['required', 'image', 'dimensions:min_width=400,min_height=300', 'max:10000']
         ]);
 
@@ -110,6 +110,7 @@ class RecipeController extends Controller
             'name' => ['sometimes', 'required', 'string', 'between:5,50'],
             'description' => ['sometimes', 'required', 'string', 'max:150'],
             'recipe' => ['sometimes', 'required', 'string', 'max:500'],
+            'duration' => ['sometimes', 'integer', 'min:10'],
             'picture' => ['sometimes', 'image', 'dimensions:min_width=400,min_height=300', 'max:10000']
         ]);
 
