@@ -97,8 +97,8 @@ class CommentController extends Controller
     public function updateForUserRecipe(Request $request, int $userId, int $recipeId, int $commentId): JsonResponse
     {
         $data = $this->validate($request, [
-            'title' => ['sometimes', 'string', 'between:3,40'],
-            'comment' => ['sometimes', 'string', 'max:200'],
+            'title' => ['sometimes', 'required', 'string', 'between:3,40'],
+            'comment' => ['sometimes', 'required', 'string', 'max:200'],
         ]);
 
         /** @var \App\Models\Recipe $recipe */

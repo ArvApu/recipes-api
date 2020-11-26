@@ -103,9 +103,9 @@ class RecipeController extends Controller
     public function updateForUser(Request $request, int $userId, int $recipeId): JsonResponse
     {
         $data = $this->validate($request, [
-            'name' => ['sometimes', 'string', 'between:5,50'],
-            'description' => ['sometimes', 'string', 'max:150'],
-            'recipe' => ['sometimes', 'string'],
+            'name' => ['sometimes', 'required', 'string', 'between:5,50'],
+            'description' => ['present', 'required', 'string', 'max:150'],
+            'recipe' => ['present', 'required', 'string'],
         ]);
 
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
