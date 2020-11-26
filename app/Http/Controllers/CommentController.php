@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -34,7 +35,9 @@ class CommentController extends Controller
      */
     public function allForUserRecipe(int $userId, int $recipeId): JsonResponse
     {
-        $comments = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId)->comments;
+        /** @var Recipe $recipe */
+        $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
+        $comments = $recipe->comments()->with('author')->get();
         return new JsonResponse($comments, JsonResponse::HTTP_OK);
     }
 

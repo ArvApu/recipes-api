@@ -60,7 +60,7 @@ class RecipeController extends Controller
      */
     public function oneForUser(int $userId, int $recipeId): JsonResponse
     {
-        $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
+        $recipe = $this->user->findOrFail($userId)->recipes()->with('author')->findOrFail($recipeId);
         return new JsonResponse($recipe, JsonResponse::HTTP_OK);
     }
 
