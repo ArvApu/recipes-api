@@ -28,5 +28,6 @@ class AppPrepareCommand extends Command
     public function handle()
     {
         $this->call('migrate', ['--force' => true]);
+        $this->call('storage:link');
     }
 }
