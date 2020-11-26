@@ -9,6 +9,8 @@ namespace App\Models;
  * @property string $name
  * @property string $description
  * @property string $recipe
+ * @property integer $duration
+ * @property string $picture
  * @property $created_at
  * @property $updated_at
  * @property User $author
@@ -21,7 +23,7 @@ class Recipe extends Model
      * @inheritdoc
      */
     protected $fillable = [
-        'user_id', 'name', 'description', 'recipe', 'duration'
+        'user_id', 'name', 'description', 'recipe', 'duration', 'picture'
     ];
 
     /**
