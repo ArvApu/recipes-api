@@ -62,6 +62,7 @@ $app->configure('app');
 $app->configure('auth');
 $app->configure('roles');
 $app->configure('cors');
+$app->configure('filesystems');
 
 /*
 |--------------------------------------------------------------------------
