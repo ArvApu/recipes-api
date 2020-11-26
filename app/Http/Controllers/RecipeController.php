@@ -77,7 +77,7 @@ class RecipeController extends Controller
         $data = $this->validate($request, [
             'name' => ['required', 'string', 'between:3,50'],
             'description' => ['required', 'string', 'max:150'],
-            'recipe' => ['required', 'string'],
+            'recipe' => ['required', 'string', 'max:500'],
             'duration' => ['required', 'integer'],
         ]);
 
@@ -105,7 +105,7 @@ class RecipeController extends Controller
         $data = $this->validate($request, [
             'name' => ['sometimes', 'required', 'string', 'between:5,50'],
             'description' => ['present', 'required', 'string', 'max:150'],
-            'recipe' => ['present', 'required', 'string'],
+            'recipe' => ['present', 'required', 'string', 'max:500'],
         ]);
 
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
