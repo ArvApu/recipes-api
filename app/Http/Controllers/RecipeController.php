@@ -76,8 +76,8 @@ class RecipeController extends Controller
     {
         $this->validate($request, [
             'name' => ['required', 'string', 'between:3,50'],
-            'description' => ['required', 'string', 'max:150'],
-            'recipe' => ['required', 'string', 'max:500'],
+            'description' => ['required', 'string', 'max:500'],
+            'recipe' => ['required', 'string', 'max:1000'],
             'duration' => ['required', 'integer', 'min:10'],
             'picture' => ['required', 'image', 'dimensions:min_width=400,min_height=300', 'max:10000']
         ]);
@@ -108,8 +108,8 @@ class RecipeController extends Controller
     {
         $data = $this->validate($request, [
             'name' => ['sometimes', 'required', 'string', 'between:5,50'],
-            'description' => ['sometimes', 'required', 'string', 'max:150'],
-            'recipe' => ['sometimes', 'required', 'string', 'max:500'],
+            'description' => ['sometimes', 'required', 'string', 'max:500'],
+            'recipe' => ['sometimes', 'required', 'string', 'max:1000'],
             'duration' => ['sometimes', 'integer', 'min:10'],
             'picture' => ['sometimes', 'image', 'dimensions:min_width=400,min_height=300', 'max:10000']
         ]);
