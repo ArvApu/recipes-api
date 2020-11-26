@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -67,7 +68,7 @@ class CommentController extends Controller
             'comment' => ['required', 'string', 'max:200'],
         ]);
 
-        $data['user_id'] = $userId;
+        $data['user_id'] = Auth::user()->id;
 
         /** @var \App\Models\Recipe $recipe */
         $recipe = $this->user->findOrFail($userId)->recipes()->findOrFail($recipeId);
