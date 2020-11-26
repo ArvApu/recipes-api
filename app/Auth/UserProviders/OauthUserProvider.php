@@ -110,7 +110,7 @@ class OauthUserProvider implements UserProvider
         $systemUser = [
             'role_id' => $this->resolveUserRole($oauthUser['role_id']),
             'oauth_user_id' => $oauthUser['id'],
-            'username' => $oauthUser['username'],
+            'username' => $oauthUser['username'] ?? explode('@', $oauthUser['email'])[0],
             'email' => $oauthUser['email'],
             'last_login_at' => new \DateTime(),
             'created_at' => new \DateTime(),
